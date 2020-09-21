@@ -1,8 +1,9 @@
 const exec = require("../model").exec;
+const common = require('./common')
 
 exports.list = async (ctx) => {
     const res = await exec("select * from todolist")
-    ctx.body = res
+    ctx.body = common.success(res)
 };
 
 exports.add = async (ctx) => {
@@ -24,7 +25,7 @@ exports.add = async (ctx) => {
             ${user_id}
         )`;
     await exec(sql)
-    ctx.body = "success"
+    ctx.body = common.success()
 };
 
 exports.update = async (ctx) => {
@@ -46,7 +47,7 @@ exports.update = async (ctx) => {
         user_id=${user_id}
         where id=${id}`
     await exec(sql)
-    ctx.body = "success"
+    ctx.body = common.success()
 };
 
 exports.del = async (ctx) => {
@@ -55,7 +56,7 @@ exports.del = async (ctx) => {
     } = ctx.query
     const sql = `delete from todolist where id in(${ids})`
     await exec(sql)
-    ctx.body = "success"
+    ctx.body = common.success()
 };
 
 exports.find = async (ctx) => {
@@ -64,5 +65,5 @@ exports.find = async (ctx) => {
     } = ctx.query
     const sql = `select * from todolist where id=${id}`
     const res = await exec(sql)
-    ctx.body = res[0]
+    ctx.body = common.success(res[0])
 };
