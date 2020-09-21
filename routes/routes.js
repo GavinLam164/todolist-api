@@ -1,13 +1,16 @@
-
 const Router = require('koa-router')
 const Todo = require('../controller/todo')
+const User = require('../controller/user')
 
 const router = new Router()
 
-router.get('/list', Todo.list)
-router.post('/add', Todo.add)
-router.post('/update', Todo.update)
-router.get('/del', Todo.del)
-router.get('/find', Todo.find)
+router.get('/todo/list', Todo.list)
+router.post('/todo/add', Todo.add)
+router.post('/todo/update', Todo.update)
+router.get('/todo/del', Todo.del)
+router.get('/todo/find', Todo.find)
+
+router.post('/user/register', User.register)
+router.post('/user/login', User.login)
 
 module.exports = router.routes()
