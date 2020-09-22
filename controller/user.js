@@ -13,6 +13,7 @@ exports.register = async (ctx) => {
     const res = await exec(`
         SELECT * FROM t_user
             WHERE phone_number='${phone_number}'`);
+
     if (res.length > 0) {
         ctx.body = common.error({
             code: 3001,

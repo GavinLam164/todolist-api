@@ -30,6 +30,7 @@ exports.add = async (ctx) => {
             ${id}
         )`;
     await exec(sql);
+
     ctx.body = common.success();
 };
 

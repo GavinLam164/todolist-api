@@ -6,6 +6,9 @@ const routes = require('./routes/routes')
 const static = require('./middlewares/static')
 const bodyParser = require('./middlewares/body-parser')
 const withUser = require('./middlewares/with-user')
+const schedule = require('./schedule')
+
+schedule()
 
 const app = new Koa()
 // app.use(bodyParser())
