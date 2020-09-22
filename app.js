@@ -5,10 +5,12 @@ const path = require('path')
 const routes = require('./routes/routes')
 const static = require('./middlewares/static')
 const bodyParser = require('./middlewares/body-parser')
+const withUser = require('./middlewares/with-user')
 
 const app = new Koa()
 // app.use(bodyParser())
 app.use(bodyParser())
+app.use(withUser())
 app.use(
         static(path.join(__dirname, 'public/'))
     )

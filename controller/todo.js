@@ -1,9 +1,12 @@
 const exec = require("../model").exec;
-const common = require('./common')
+const common = require("./common");
 
 exports.list = async (ctx) => {
-    const res = await exec("select * from todolist")
-    ctx.body = common.success(res)
+    const {
+        id
+    } = ctx.state.user
+    const res = await exec(`select * from todolist where user_id=${id}`);
+    ctx.body = common.success(res);
 };
 
 exports.add = async (ctx) => {
@@ -12,9 +15,11 @@ exports.add = async (ctx) => {
         score = 0,
         start_time,
         end_time,
-        hours = 0,
-        user_id
-    } = ctx.req.body
+        hours = 0
+    } = ctx.req.body;
+    const {
+        id
+    } = ctx.state.user
     const sql = `insert into todolist
         values(NULL,
             '${todo_name}',
@@ -22,10 +27,10 @@ exports.add = async (ctx) => {
             '${start_time}',
             '${end_time}',
             ${hours},
-            ${user_id}
+            ${id}
         )`;
-    await exec(sql)
-    ctx.body = common.success()
+    await exec(sql);
+    ctx.body = common.success();
 };
 
 exports.update = async (ctx) => {
@@ -36,34 +41,33 @@ exports.update = async (ctx) => {
         start_time,
         end_time,
         hours = 0,
-        user_id
-    } = ctx.req.body
+    } = ctx.req.body;
+
     const sql = `update todolist set
         todo_name='${todo_name}',
         score=${score},
         start_time='${start_time}',
         end_time='${end_time}',
-        hours=${hours},
-        user_id=${user_id}
-        where id=${id}`
-    await exec(sql)
-    ctx.body = common.success()
+        hours=${hours}
+        where id=${id}`;
+    await exec(sql);
+    ctx.body = common.success();
 };
 
 exports.del = async (ctx) => {
     const {
         ids
-    } = ctx.query
-    const sql = `delete from todolist where id in(${ids})`
-    await exec(sql)
-    ctx.body = common.success()
+    } = ctx.query;
+    const sql = `delete from todolist where id in(${ids})`;
+    await exec(sql);
+    ctx.body = common.success();
 };
 
 exports.find = async (ctx) => {
     const {
         id
-    } = ctx.query
-    const sql = `select * from todolist where id=${id}`
-    const res = await exec(sql)
-    ctx.body = common.success(res[0])
+    } = ctx.query;
+    const sql = `select * from todolist where id=${id}`;
+    const res = await exec(sql);
+    ctx.body = common.success(res[0]);
 };
