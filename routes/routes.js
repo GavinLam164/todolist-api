@@ -14,6 +14,7 @@ router.get('/todo/find', Todo.find)
 router.get('/today/list', Today.list)
 router.get('/today/find', Today.find)
 router.get('/today/recordList', Today.recordList)
+router.post('/today/addCost', Today.addCost)
 
 router.post('/user/register', User.register)
 router.post('/user/login', User.login)
