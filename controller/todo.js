@@ -1,5 +1,6 @@
 const exec = require("../model").exec;
 const common = require("./common");
+const moment = require("moment")
 
 exports.list = async (ctx) => {
     const {
@@ -10,13 +11,16 @@ exports.list = async (ctx) => {
 };
 
 exports.add = async (ctx) => {
-    const {
+    let {
         todo_name,
         score = 0,
         start_time,
         end_time,
         hours = 0
     } = ctx.req.body;
+
+    start_time = moment(start_time).format('YYYY-MM-DD')
+    end_time = moment(end_time).format('YYYY-MM-DD')
     const {
         id
     } = ctx.state.user
@@ -29,8 +33,26 @@ exports.add = async (ctx) => {
             ${hours},
             ${id}
         )`;
-    await exec(sql);
+    const {
+        insertId
+    } = await exec(sql);
 
+    const current_date = moment(new Date()).format('YYYY-MM-DD')
+    const isBetween = moment(current_date).isBetween(start_time, end_time, null, '[]')
+    if (isBetween) {
+        const sql = `
+        insert into todolist_record
+            values(
+                NULL,
+                ${id},
+                ${insertId},
+                '${todo_name}',
+                ${hours},
+                0,
+                '${current_date}'
+            )`
+        await exec(sql)
+    }
     ctx.body = common.success();
 };
 
@@ -59,8 +81,12 @@ exports.del = async (ctx) => {
     const {
         ids
     } = ctx.query;
-    const sql = `delete from todolist where id in(${ids})`;
+    let sql = `delete from todolist where id in(${ids})`;
     await exec(sql);
+    sql = `delete from todolist_record where todo_id in(${ids})`
+    await exec(sql)
+    sql = `delete from todolist_record_cost where todo_id in(${ids})`
+    await exec(sql)
     ctx.body = common.success();
 };
 

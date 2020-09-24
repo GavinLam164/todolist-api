@@ -1,5 +1,6 @@
 const schedule = require('node-schedule')
 const model = require('./model')
+const moment = require('moment')
 
 module.exports = () => {
 
@@ -16,8 +17,7 @@ module.exports = () => {
                 hours,
             } = row
             const total_cost = 0
-            const date = new Date()
-            const current_date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+            const current_date = moment(new Date()).format('YYYY-MM-DD')
             const sql = `
             insert into todolist_record
                 values(

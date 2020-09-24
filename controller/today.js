@@ -45,7 +45,8 @@ exports.addCost = async (ctx) => {
         message,
         file_path,
         start_time,
-        end_time
+        end_time,
+        todo_id
     } = ctx.req.body
     const startDate = moment(start_time).format('HH:mm:ss')
     const endDate = moment(end_time).format('HH:mm:ss')
@@ -53,6 +54,7 @@ exports.addCost = async (ctx) => {
         NULL,
         ${user_id},
         ${record_id},
+        ${todo_id},
         ${cost},
         NULL,
         NULL,
