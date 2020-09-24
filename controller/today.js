@@ -1,12 +1,16 @@
 const exec = require("../model").exec;
 const common = require("./common");
+const moment = require('moment')
 
 exports.list = async (ctx) => {
     const {
         id
     } = ctx.state.user;
+    const start_time_str = moment(new Date()).format('YYYY-MM-DD')
     const sql = `SELECT * FROM todolist_record
-        WHERE user_id=${id}`;
+        WHERE user_id=${id}
+        AND \`current_date\` LIKE '${start_time_str}'
+        `;
     const res = await exec(sql);
     ctx.body = common.success(res);
 };
@@ -43,10 +47,8 @@ exports.addCost = async (ctx) => {
         start_time,
         end_time
     } = ctx.req.body
-    const startDate = new Date(start_time)
-    const start_time_str = `${startDate.getHours()}:${startDate.getMinutes()}:${startDate.getSeconds()}`
-    const endDate = new Date(end_time)
-    const end_time_str = `${endDate.getHours()}:${endDate.getMinutes()}:${endDate.getSeconds()}`
+    const startDate = moment(start_time).format('HH:mm:ss')
+    const endDate = moment(end_time).format('HH:mm:ss')
     let sql = `INSERT INTO todolist_record_cost values(
         NULL,
         ${user_id},
@@ -54,8 +56,8 @@ exports.addCost = async (ctx) => {
         ${cost},
         NULL,
         NULL,
-        '${start_time_str}',
-        '${end_time_str}'
+        '${startDate}',
+        '${endDate}'
     )`
     await exec(sql)
 

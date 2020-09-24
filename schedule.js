@@ -2,6 +2,7 @@ const schedule = require('node-schedule')
 const model = require('./model')
 
 module.exports = () => {
+
     schedule.scheduleJob('1 0 * * *', async () => {
         const res = await model.exec(`
             SELECT * FROM todolist t
@@ -16,7 +17,7 @@ module.exports = () => {
             } = row
             const total_cost = 0
             const date = new Date()
-            const current_date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`
+            const current_date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
             const sql = `
             insert into todolist_record
                 values(
